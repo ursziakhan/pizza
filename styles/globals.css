@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input,
+textarea {
+  @apply border border-gray-200 rounded-sm w-full py-2 px-3 !important;
+  @apply mb-4 !important;
+}
+input:focus,
+textarea:focus {
+  @apply border-blue-900 !important;
+}
+h1 {
+  @apply text-blue-900 mb-4 text-2xl font-bold !important;
+}
+button {
+  @apply text-white bg-blue-900 px-4 py-1  shadow-sm rounded p-6 hover:bg-blue-600 !important;
+}
+label {
+  @apply text-blue-900 text-lg !important;
+}
+table.basic {
+  @apply w-full !important;
+}
+table.basic tr td {
+  @apply border border-blue-200 p-1 !important;
+}
+
+table.basic thead tr td {
+  @apply bg-blue-100 !important;
+}
+
+/* table.basic a {
+  @apply bg-blue-900 text-white text-small p-1 rounded-md inline-flex;
+} */
