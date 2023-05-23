@@ -2,11 +2,10 @@ import Layout from '../components/Layout';
 
 import Link from 'next/link';
 import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+// import Image from 'next/image';
 
 function products() {
   const [product, setProduct] = useState([]);

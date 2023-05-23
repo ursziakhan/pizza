@@ -4,39 +4,38 @@ import axios from 'axios';
 
 export default function EditProductPage() {
   const { query } = useRouter();
-  const { slug } = query;
-  console.log(slug);
+  const { id } = query;
 
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    async function getProduct(id) {
-      try {
-        const response = await fetch(`/api/products/${id}`);
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
+    // async function getProduct(id) {
+    //   try {
+    //     const response = await fetch(`/api/products/${id}`);
+    //     const data = await response.json();
+    //     return data;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // async function fetchData() {
+    //   try {
+    //     const data = await getProduct(id);
+    //     setProduct(data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // fetchData();
+    if (id) {
+      axios
+        .get(`/api/products?id=${id}`)
+        .then((response) => {
+          setProduct(response.data);
+        })
+        .catch((error) => console.error(error));
     }
-    async function fetchData() {
-      try {
-        const data = await getProduct(slug);
-        setProduct(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchData();
-
-    // axios
-    //   .get(`/api/products/${slug}`)
-    //   .then((response) => {
-    //     setProduct(response.data);
-    //   })
-    //   .catch((error) => console.error(error));
-  }, []);
+  }, [id]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

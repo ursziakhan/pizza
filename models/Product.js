@@ -12,7 +12,7 @@ const ProductSchema = new Schema(
     title: { type: String, required: true },
     description: String,
     price: { type: Number, required: true },
-    // image: [ImageSchema], // an array of image URLs
+    image: [ImageSchema], // an array of image URLs
   },
   {
     timestamps: true, // add timestamps for createdAt and updatedAt fields
