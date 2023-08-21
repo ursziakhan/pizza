@@ -73,12 +73,7 @@ function Products() {
               <tr key={item.id}>
                 <td>{item.title}</td>
                 <td>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    width={50}
-                    height={50}
-                  />
+                <img src={`/upload/${item.image}`} alt={item.name} width={100} height={100} />
                 </td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
