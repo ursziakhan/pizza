@@ -81,8 +81,8 @@ export default function ProductForm() {
     <label>Category</label>
    <select>
   <option value="">Uncategorized</option>
-  {categories.length > 0 && categories.map(cat => (
-    <option value={cat._id}>{cat.name}</option>
+  {categories.length > 0 && categories.map((cat, index) => (
+    <option key={index} value={cat._id}>{cat.name}</option>
   ))}
 </select>
 
