@@ -1,30 +1,41 @@
-import multiparty from 'multiparty';
-import mongooseConnect from '@/lib/mongoose';
-
-export default async function handler(req, res) {
-  await mongooseConnect();
-  const form = new multiparty.Form();
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      res.status(500).json({ message: 'Error parsing form data' });
-      return;
-    }
-
-    // Access the uploaded file
-    const file = files.files[0];
-    if (!file) {
-      res.status(400).json({ message: 'Invalid file' });
-      return;
-    }
-
-    // Handle the file as needed (e.g., save it, process it, etc.)
-
-    res.status(200).json({ message: 'ok' });
-  });
-}
+import formidable from "formidable";
+import path from "path";
+import fs from "fs/promises";
 
 export const config = {
-  api: {
-    bodyParser: false,
-  },
+  api: { bodyParser: false }
 };
+
+const readFile = ( req, saveLocally) => {
+  const options = {};
+  if (saveLocally) {
+    options.uploadDir = path.join(process.cwd(), "/public/images");
+    options.filename = (name, ext, path, form) => {
+      return Date.now().toString() + "_" + path.originalFilename;
+    };
+  }
+  // options.maxFileSize = 4000 * 1024 * 1024;
+  const form = formidable(options);
+  return new Promise((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) reject(err);
+      resolve({ fields, files });
+    });
+  });
+};
+
+const handler = async (req, res) => {
+  try {
+    await fs.readdir(path.join(process.cwd() + "/public", "/images"));
+  } catch (error) {
+    await fs.mkdir(path.join(process.cwd() + "/public", "/images"));
+  }
+  try {
+  const file = await readFile(req, true);
+  res.json({ files: file.fields.files });
+  } catch (err) {
+    console.log(err)
+  }
+};
+
+export default handler;
