@@ -32,7 +32,7 @@ const handler = async (req, res) => {
   }
   try {
   const file = await readFile(req, true);
-  res.json({ files: file.fields.files });
+  res.json({ files: file.files.files[0].newFilename });
   } catch (err) {
     console.log(err)
   }
