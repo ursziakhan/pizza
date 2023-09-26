@@ -63,6 +63,7 @@ export default function EditProductPage() {
         <form onSubmit={handleSubmit}>
           <label htmlFor="title">Title:</label>
           <input
+          
             type="text"
             id="title"
             name="title"

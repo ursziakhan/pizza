@@ -9,6 +9,8 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+
+
   useEffect(() => {
     axios
       .get('/api/products')
@@ -22,6 +24,12 @@ function Products() {
         setLoading(false);
       });
   }, []);
+
+
+
+
+
+
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -40,6 +48,16 @@ function Products() {
         >
           Add new product
         </Link>
+
+        <button
+          className="bg-blue-900 text-white py-1 px-2 rounded-md"
+        
+        >
+          Delete All
+        </button>
+        
+
+        
         <input
           type="text"
           id="search"
@@ -58,8 +76,12 @@ function Products() {
         </div>
       ) : (
         <table className="basic mt-2">
-          <thead>
+          <thead >
             <tr>
+            <td className='width-20'>  <input
+                type="checkbox"
+               
+              /></td>
               <td>Name</td>
               <td>Image</td>
               <td>Description</td>
@@ -69,11 +91,21 @@ function Products() {
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map((item) => (
-              <tr key={item.id}>
-                <td>{item.title}</td>
-                <td>
+      
+
+            {filteredProducts.map((item, index) => (
+              <tr key={item.id }>
+            
+              <td className="flex gap-2 items-center w-20">
+      <input type="checkbox" value={item.id} />
+      <span>{index + 1}</span> 
+    </td>
+              
+                <td>   
+            
+              {item.title}</td>
                 
+                <td>
                 <img
                 src={`/images/${item.images[0]}`} 
                 alt={item.name}
@@ -81,9 +113,6 @@ function Products() {
                 height={100}
               />
 
-
-
-              
                 </td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
@@ -118,14 +147,17 @@ function Products() {
                       strokeWidth="1.5"
                       stroke="currentColor"
                       className="w-4 h-4 mr-1"
-                    >
+                    > 
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
                       />
+
                     </svg>
                     <span>Delete</span>
+
+              
                   </Link>
                 </td>
               </tr>

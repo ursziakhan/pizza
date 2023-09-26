@@ -1,98 +1,93 @@
+import React, { useState } from 'react';
 
-           
-import React, { useState, FormEvent } from 'react';
+const ProductList = () => {
+  const [products, setProducts] = useState([
+    { id: 1, name: 'Product A', description: 'Description A', price: 10.99 },
+    { id: 2, name: 'Product B', description: 'Description B', price: 19.99 },
+    { id: 3, name: 'Product C', description: 'Description C', price: 5.99 },
+    { id: 4, name: 'Product D', description: 'Description D', price: 15.49 },
+    { id: 5, name: 'Product E', description: 'Description E', price: 7.99 },
+  ]);
 
-export default function Test() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [sex, setSex] = useState('');
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
-  const handleFormOpen = () => {
-    setIsFormOpen(true);
+  const toggleProductSelection = (productId) => {
+    if (selectedProductIds.includes(productId)) {
+      // If the product is already selected, remove it
+      setSelectedProductIds(selectedProductIds.filter((id) => id !== productId));
+    } else {
+      // If the product is not selected, add it
+      setSelectedProductIds([...selectedProductIds, productId]);
+    }
   };
 
-  const handleFormClose = () => {
-    setIsFormOpen(false);
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      // If "Select All" is checked, clear the selected products
+      setSelectedProductIds([]);
+    } else {
+      // If "Select All" is not checked, select all products
+      setSelectedProductIds(products.map((product) => product.id));
+    }
+    setSelectAll(!selectAll);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Submitted:', name, age, sex);
-    handleFormClose(); // Close the form after submission
+  const deleteSelectedProducts = () => {
+    // Filter out the selected products and update the state
+    const updatedProducts = products.filter((product) => !selectedProductIds.includes(product.id));
+    setProducts(updatedProducts);
+    // Clear the selection and uncheck "Select All"
+    setSelectedProductIds([]);
+    setSelectAll(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <button
-        className="ml-8 border-2 bg-[#1a1a64] text-primary rounded-full px-6 py-2 inline-block font-semibold hover:bg-primary hover:text-optional"
-        onClick={handleFormOpen}
-      >
-        Add Your Docking
-      </button>
-
-      {isFormOpen && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <h2 className="text-2xl font-semibold mb-4">Add Docking Information</h2>
-            <form onSubmit={handleSubmit}>
-  <div className="mb-4">
-    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-      Name
-    </label>
-    <input
-      type="text"
-      id="name"
-      className="mt-1 p-2 border rounded-md w-full"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-    />
-  </div>
-  <div className="mb-4">
-    <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-      Age
-    </label>
-    <input
-      type="text"
-      id="age"
-      className="mt-1 p-2 border rounded-md w-full"
-      value={age}
-      onChange={(e) => setAge(e.target.value)}
-    />
-  </div>
-  <div className="mb-4">
-    <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
-      Sex
-    </label>
-    <input
-      type="text"
-      id="sex"
-      className="mt-1 p-2 border rounded-md w-full"
-      value={sex}
-      onChange={(e) => setSex(e.target.value)}
-    />
-  </div>
-  <div className="flex justify-end">
-    <button
-      type="button"
-      className="mr-2 px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100"
-      onClick={handleFormClose}
-    >
-      Cancel
-    </button>
-    <button
-      type="submit"
-      className="px-4 py-2 bg-[#1a1a64] text-primary rounded-md font-semibold hover:bg-primary hover:text-optional"
-    >
-      Submit
-    </button>
-  </div>
-</form>
-
-          </div>
-        </div>
-      )}
+    <div>
+      <h1>Product List</h1>
+      <label>
+        <input
+          type="checkbox"
+          checked={selectAll}
+          onChange={toggleSelectAll}
+        />
+        Select All
+      </label>
+      <button onClick={deleteSelectedProducts}>Delete</button>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={toggleSelectAll}
+              />
+            </th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedProductIds.includes(product.id)}
+                  onChange={() => toggleProductSelection(product.id)}
+                />
+              </td>
+              <td>{product.name}</td>
+              <td>{product.description}</td>
+              <td>${product.price.toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
+
+export default ProductList;

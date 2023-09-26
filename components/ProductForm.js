@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function ProductForm() {
   const [title, setTitle] = useState("");
@@ -11,8 +12,11 @@ export default function ProductForm() {
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState([]);
 
+  const router=useRouter();
+  
   // fixing categories
   useEffect(() => {
+
     axios.get("/api/categories").then((result) => {
       setCategories(result.data);
     });
@@ -57,9 +61,9 @@ export default function ProductForm() {
     }
   }
 
-  //   if (goToProducts) {
-  //     router.push("/products/");
-  //   }
+     if (goToProducts) {
+     router.push("/products/");
+     }
   return (
     <form onSubmit={createProduct}>
       <label>Product name</label>
