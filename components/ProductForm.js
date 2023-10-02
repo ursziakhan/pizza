@@ -6,7 +6,7 @@ export default function ProductForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFiles, setSelectedFiles] = useState();
 
   const [price, setPrice] = useState("");
   const [goToProducts, setGoToProducts] = useState(false);
@@ -25,11 +25,15 @@ export default function ProductForm() {
   const handleChange = (e) => {
     setTitle(e.target.value);
   };
-
+  
   async function createProduct(event) {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("files", selectedFile);
+    selectedFiles.forEach((file, index) => {
+      formData.append(`file${index + 1}`, file);
+    });
+
+    
 
     try {
       const uploadResponse = await fetch("/api/upload", {
@@ -105,11 +109,12 @@ export default function ProductForm() {
         <input
           id="image"
           type="file"
+          multiple
           onChange={(e) => {
             if (e.target.files) {
-              const file = e.target.files[0];
+              const files = Array.from(e.target.files);
               // setSelectedImage(URL.createObjectURL(file));
-              setSelectedFile(file);
+              setSelectedFiles(files);
             }
           }}
         />

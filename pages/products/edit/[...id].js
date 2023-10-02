@@ -8,6 +8,8 @@ export default function EditProductPage() {
   const { query } = router;
   const { id } = query;
 
+
+
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState(null);
 
