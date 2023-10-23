@@ -10,7 +10,6 @@ const readFile = ( req, saveLocally) => {
   const options = {};
   if (saveLocally) {
     options.uploadDir = path.join(process.cwd(), "/public/images");
-    options.multiples = true;
     options.filename = (name, ext, path, form) => {
       return Date.now().toString() + "_" + path.originalFilename;
     };
@@ -32,10 +31,8 @@ const handler = async (req, res) => {
     await fs.mkdir(path.join(process.cwd() + "/public", "/images"));
   }
   try {
-    
   const file = await readFile(req, true);
-  const uploadedFiles = file.files.files.map(file => file.newFilename)
-  res.json({ files: uploadedFiles});
+  res.json({ files: file.files.files[0].newFilename });
   } catch (err) {
     console.log(err)
   }

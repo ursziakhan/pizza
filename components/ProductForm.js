@@ -6,17 +6,16 @@ export default function ProductForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState();
+  const [selectedFile, setSelectedFile] = useState();
 
   const [price, setPrice] = useState("");
   const [goToProducts, setGoToProducts] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  const router=useRouter();
-  
+  const router = useRouter();
+
   // fixing categories
   useEffect(() => {
-
     axios.get("/api/categories").then((result) => {
       setCategories(result.data);
     });
@@ -25,16 +24,12 @@ export default function ProductForm() {
   const handleChange = (e) => {
     setTitle(e.target.value);
   };
-  
+
   async function createProduct(event) {
     event.preventDefault();
     const formData = new FormData();
-    selectedFiles.forEach((file, index) => {
-      formData.append(`file${index + 1}`, file);
-    });
-
-    
-
+    formData.append("files", selectedFile);
+    console.log(formData)
     try {
       const uploadResponse = await fetch("/api/upload", {
         method: "POST",
@@ -46,7 +41,7 @@ export default function ProductForm() {
         return;
       }
 
-      console.log(uploadResponse.body);
+      // console.log(uploadResponse.body);
 
       // Assuming the API route returns file information in JSON format
       const { files } = await uploadResponse.json();
@@ -65,11 +60,11 @@ export default function ProductForm() {
     }
   }
 
-     if (goToProducts) {
-     router.push("/products/");
-     }
+  if (goToProducts) {
+    router.push("/products/");
+  }
   return (
-    <form onSubmit={createProduct}>
+    <form encType="multipart/form-data" onSubmit={createProduct}>
       <label>Product name</label>
       <input
         required
@@ -107,14 +102,16 @@ export default function ProductForm() {
       <label htmlFor="images">Upload an image</label>
       <div className="mb-2">
         <input
+          // multiple
           id="image"
           type="file"
-          multiple
           onChange={(e) => {
             if (e.target.files) {
-              const files = Array.from(e.target.files);
+              // convert filelist to array using array.from()
+              const files = e.target.files[0] 
+              // console.log(files)
               // setSelectedImage(URL.createObjectURL(file));
-              setSelectedFiles(files);
+              setSelectedFile(files);
             }
           }}
         />
